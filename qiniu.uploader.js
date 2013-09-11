@@ -211,26 +211,33 @@ if (typeof FileReader == "undefined") {
 
     /*******************
      *DataBase Interface
+     ********************/
     var Qiniu_DB = (function DB() {
+
         if(!Qiniu_historyTag){
            return;
         }
+
         var _db;
+
         var DBNAME = "QINIU_DB";
         var request = window.indexedDB.open(DBNAME);
+
         request.onerror = function(evt) {
             return null;
         };
+
         request.onsuccess = function(evt) {
             _db = request.result;
         };
+
         var AddProgress = function(key, p) {
             var transaction = db.transaction(["progress" + key], "readwrite");
             var oStore = transaction.objectStore("progress");
             oStore.put(p);
         }
+
     })();
-    ********************/
 
     var Qiniu_status = new Object();
     var Qiniu_taking = 0;
@@ -246,7 +253,7 @@ if (typeof FileReader == "undefined") {
     var Qiniu_blockBits = 22;
     var Qiniu_blockMask = (1 << Qiniu_blockBits) - 1;
     var Qiniu_BLKSize = 4 * 1024 * 1024;
-    var Qiniu_chunkSize = 1024 * 512;
+    var Qiniu_chunkSize = 1024 * 512 * 2;
 
     //count
     var Qiniu_chunks = 0;
@@ -270,6 +277,7 @@ if (typeof FileReader == "undefined") {
     var Qiniu_Progresses = [];
 
     var Qiniu_UploadUrl = "http://up.qiniu.com";
+    // var Qiniu_UploadUrl = "http://upbeta.qiniu.com";
 
     var Qiniu_file = undefined;
 
@@ -732,7 +740,7 @@ if (typeof FileReader == "undefined") {
             Qiniu_putExtra = extra;
         },
 
-        History: function(his) {
+        Histroy: function(his) {
 
             Qiniu_historyTag = his;
         },

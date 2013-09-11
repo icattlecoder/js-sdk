@@ -544,9 +544,9 @@ window.bootbox = window.bootbox || (function init($, undefined) {
       CONFIRM : "Akzeptieren"
     },
     en : {
-      OK      : "OK",
-      CANCEL  : "Cancel",
-      CONFIRM : "OK"
+      OK      : "Ok",
+      CANCEL  : "取消",
+      CONFIRM : "确认"
     },
     es : {
       OK      : "OK",
