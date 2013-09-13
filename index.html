@@ -99,7 +99,7 @@
         opacity: 0;
         /* 实现的关键点 */
     }
-    .td_pro{
+    .td_pro {
         width: 400px;
     }
     </style>
@@ -192,7 +192,7 @@
 
                 $("#btn_upload").on("click", function() {
 
-                    
+
 
                     if (Q.IsUploading()) {
                         //alert("正在上传")
@@ -301,10 +301,27 @@
                                 $("#btn_upload").prop("disabled", true)
                                 var f = files_arr.pop();
                                 var key = getKey(f.name);
-                                $(this).attr("state", "pause");
-                                $(this).html('<span class="glyphicon glyphicon-pause"></span>暂停');
-                                console.log("uploading file:", f.name, " key:", key);
-                                Q.Upload(f, key);
+                                var xhr = new XMLHttpRequest();
+                                xhr.open('GET', "check.php?key=" + key, true);
+                                xhr.onreadystatechange = function(response) {
+                                    if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
+                                        var res = JSON.parse(xhr.responseText);
+                                        if (res[0] == null) {
+                                            $(this).attr("state", "pause");
+                                            $(this).html('<span class="glyphicon glyphicon-pause"></span>暂停');
+                                            console.log("uploading file:", f.name, " key:", key);
+                                            Q.Upload(f, key);
+                                        } else {
+                                            $("#td_" + idx).html(
+                                                '<strong>已存在！ </strong>' +
+                                                '<strong>文件地址: </strong> <a href="http://' + Bucket + '.qiniudn.com/' + key + '" target="_blank" >http://' + Bucket + '.qiniudn.com/' + key + '</a><br/>'
+                                            )
+                                            up();
+                                            idx++;
+                                        }
+                                    }
+                                }
+                                xhr.send();
                             } else {
                                 $("#btn_upload").prop("disabled", false)
                                 bootbox.alert("所有文件上传完成！");
